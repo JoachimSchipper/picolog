@@ -1,0 +1,5 @@
+*.sw[p-z]
+*~
+*.o
+tests/test
+tests/test.out
