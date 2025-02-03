@@ -21,6 +21,7 @@
 int
 main(int argc, char **argv)
 {
+	picolog_start_monitor();
 	picolog("foo\n");
 
 	return EXIT_SUCCESS;

@@ -14,11 +14,78 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <sys/mman.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+#include <assert.h>
+#include <err.h>
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <strings.h>
+#include <unistd.h>
+
 #include "include/picolog.h"
+
+static char (*msgs)[2 * 1024 * 1024] = NULL;
+static char *p = NULL;
+
+void
+picolog_start_monitor(void)
+{
+	assert(msgs == NULL);
+	/* FIXME for performance?, consider MAP_HUGETLB | MAP_HUGE_2MB */
+	if ((msgs = mmap(NULL, sizeof(*msgs), PROT_READ | PROT_WRITE,
+			    MAP_SHARED | MAP_ANONYMOUS, -1, 0)) == MAP_FAILED)
+		err(1, "failed to allocate shared memory");
+	p = *msgs;
+
+	pid_t pid;
+	if ((pid = fork()) == -1)
+		err(1, "failed to fork monitor");
+	else if (pid == 0)
+		return;
+
+	int status;
+	if (waitpid(pid, &status, 0) == -1)
+		err(1, "failed to wait for child %jd\n", (intmax_t)pid);
+
+	printf("Output from child:\n%s", *msgs);
+
+	if (WIFEXITED(status)) {
+		exit(WEXITSTATUS(status));
+	} else if WIFSIGNALED(status) {
+		printf("Child terminated with signal %d\n", WTERMSIG(status));
+		exit(1);
+	} else {
+		printf("Child terminated, wait status = %d\n", status);
+		exit(1);
+	}
+	/* NOTREACHED */
+	abort();
+}
 
 int
 picolog(const char *msg)
 {
-	return printf("%s", msg);
+	bool tried_again = false;
+
+again:
+	const size_t available_size = &(*msgs)[sizeof(*msgs) / sizeof(**msgs) - 1] - p;
+	const int needed = snprintf(p, available_size, "%s", msg);
+
+	if (needed >= available_size) {
+		bzero(p, available_size);
+		p = *msgs;
+
+		if (tried_again)
+			return -1;
+
+		tried_again = true;
+		goto again;
+	}
+
+	return needed;
 }
