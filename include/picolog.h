@@ -14,5 +14,17 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-void picolog_start_monitor(void);
-int picolog(const char *msg);
+/*
+ * Fork() and return in the child; the parent (monitor) process prints picolog
+ * messages after child terminates, and passes through exit status.
+ *
+ * msg_buf_size is 0 (to let the library choose a default) or the approximate
+ * number of bytes to allocate.
+ */
+void picolog_start_monitor(size_t msg_buf_size);
+
+/* Log msg. */
+void picolog(const char *msg);
+
+/* For debugging: visualize current state of internal buffer to stderr. */
+void picolog_dump(void);

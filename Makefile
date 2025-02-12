@@ -12,17 +12,14 @@ TEST_OBJS=${TESTS:.c=.o}
 
 all: tests/test
 
-test: tests/test.out
-	diff -u tests/test.expected tests/test.out
+test: tests/test tests/test.py
+	./tests/test.py
 
 clean:
 	rm -f ${OBJS} ${TEST_OBJS} ./tests/test ./tests/test.out
 
 monitor:
-	ls ${SRC} ${HEADERS} ${TESTS} tests/test.expected Makefile | entr -acs "${MAKE} ${MAKEFLAGS} test"
-
-tests/test.out: tests/test
-	./tests/test > ./tests/test.out
+	ls ${SRC} ${HEADERS} ${TESTS} tests/test.py Makefile | entr -acs "${MAKE} ${MAKEFLAGS} test"
 
 tests/test: ${OBJS} ${TEST_OBJS}
 	${CC} ${CFLAGS} ${LDFLAGS} -o ./tests/test ${OBJS} ${TEST_OBJS}

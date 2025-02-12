@@ -1,5 +1,6 @@
 *.sw[p-z]
 *~
 *.o
+__pycache__/
 tests/test
 tests/test.out
