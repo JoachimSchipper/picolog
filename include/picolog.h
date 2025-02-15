@@ -14,6 +14,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#ifndef PICOLOG_H_INCLUDED
+#define PICOLOG_H_INCLUDED 1
 /*
  * Fork() and return in the child; the parent (monitor) process prints picolog
  * messages after child terminates, and passes through exit status.
@@ -28,3 +30,4 @@ void picolog(const char *msg);
 
 /* For debugging: visualize current state of internal buffer to stderr. */
 void picolog_dump(void);
+#endif /* PICOLOG_H_INCLUDED */
