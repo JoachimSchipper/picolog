@@ -21,6 +21,7 @@
 #include <assert.h>
 #include <ctype.h>
 #include <err.h>
+#include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -113,7 +114,7 @@ picolog_start_monitor(size_t msg_buf_size)
 }
 
 void
-picolog(const char *msg)
+picolog(const char *format, ...)
 {
 	picolog_assert_consistent();
 	unsigned int tried_again;
@@ -121,9 +122,15 @@ picolog(const char *msg)
 		const size_t available_size = msgs_size - msgs_idx;
 		int needed;
 
-		if (available_size >= 1 &&
-		    (needed = snprintf(&msgs[msgs_idx], available_size - 1,
-				       "%s", msg)) < available_size - 1) {
+		if (available_size >= 1) {
+			va_list ap;
+			va_start(ap, format);
+			needed = vsnprintf(&msgs[msgs_idx], available_size - 1,
+			    format, ap);
+			va_end(ap);
+		}
+
+		if (available_size >= 1 && needed < available_size - 1) {
 			msgs_idx += needed;
 			picolog_assert_consistent();
 			return;

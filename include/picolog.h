@@ -25,8 +25,9 @@
  */
 void picolog_start_monitor(size_t msg_buf_size);
 
-/* Log msg. */
-void picolog(const char *msg);
+/* Log a message; arguments are as for printf(). */
+__attribute__((format(printf, 1, 2)))
+void picolog(const char *format, ...);
 
 /* For debugging: visualize current state of internal buffer to stderr. */
 void picolog_dump(void);

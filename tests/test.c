@@ -62,7 +62,7 @@ main(int argc, char **argv)
 	errno = 0;
 	while ((line_len = getline(&line, &line_size, stdin)) != -1) {
 		assert(line_len == strlen(line));  /* \0's will break test */
-		picolog(line);
+		picolog("%s", line);
 	}
 	if (errno != 0 || !feof(stdin)) {
 		/* errno is set by getline(), not by ferror() */
