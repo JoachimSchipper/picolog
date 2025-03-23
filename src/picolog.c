@@ -104,10 +104,10 @@ picolog_start_monitor(size_t msg_buf_size)
 		exit(WEXITSTATUS(status));
 	} else if WIFSIGNALED(status) {
 		printf("Child terminated with signal %d\n", WTERMSIG(status));
-		exit(1);
+		exit(126);
 	} else {
 		printf("Child terminated, wait status = %d\n", status);
-		exit(1);
+		exit(126);
 	}
 	/* NOTREACHED */
 	abort();

@@ -18,7 +18,8 @@
 #define PICOLOG_H_INCLUDED 1
 /*
  * fork() and return in the child; the parent (monitor) process prints picolog
- * messages after child terminates, and passes through exit status.
+ * messages after child terminates, and exits with the child's exit status (or
+ * 126 if the child exited in any other way, e.g. via a signal).
  *
  * msg_buf_size is 0 (to let the library choose a default) or the approximate
  * number of bytes to allocate.
