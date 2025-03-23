@@ -26,7 +26,7 @@
  */
 void picolog_start_monitor(size_t msg_buf_size);
 
-/* Log a message; arguments are as for printf(). */
+/* Log a message; arguments are as for printf(). Not threadsafe (currently). */
 __attribute__((format(printf, 1, 2)))
 void picolog(const char *format, ...);
 
