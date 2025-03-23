@@ -17,7 +17,7 @@
 #ifndef PICOLOG_H_INCLUDED
 #define PICOLOG_H_INCLUDED 1
 /*
- * Fork() and return in the child; the parent (monitor) process prints picolog
+ * fork() and return in the child; the parent (monitor) process prints picolog
  * messages after child terminates, and passes through exit status.
  *
  * msg_buf_size is 0 (to let the library choose a default) or the approximate
