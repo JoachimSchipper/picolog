@@ -3,4 +3,3 @@
 *.o
 __pycache__/
 tests/test
-tests/test.out

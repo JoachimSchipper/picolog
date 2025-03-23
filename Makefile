@@ -30,7 +30,7 @@ test: tests/test tests/test.py
 	./tests/test.py
 
 clean:
-	rm -f ${OBJS} ${TEST_OBJS} ./tests/test ./tests/test.out
+	rm -f ${OBJS} ${TEST_OBJS} ./tests/test
 
 monitor:
 	ls ${SRC} ${HEADERS} ${TESTS} tests/test.py Makefile | entr -acs "${MAKE} ${MAKEFLAGS} test"
