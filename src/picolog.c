@@ -94,6 +94,8 @@ picolog_start_monitor(size_t msg_buf_size)
 	else if (pid == 0)
 		return;
 
+	/* FIXME should probably set up signal handlers for parent */
+
 	int status;
 	if (waitpid(pid, &status, 0) == -1)
 		err(1, "failed to wait for child %jd\n", (intmax_t)pid);
