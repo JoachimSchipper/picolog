@@ -95,7 +95,26 @@ picolog_start_monitor(size_t msg_buf_size)
 	else if (pid == 0)
 		return;
 
-	/* FIXME should probably set up signal handlers for parent */
+	/* Move the parent process "out of the way". */
+	if (chdir("/") != 0)
+		err(1, "failed to chdir(\"/\")");
+
+	/*
+	 * We intentionally do not e.g. close() stdin or closefrom(), since
+	 * some environments might kill the parent once stdin is closed (e.g.
+	 * because the parent close()d stdin and the child crashed). Callers
+	 * who want to close stdin can do so before invoking picolog if desired
+	 * (or can patch here).
+	 */
+
+	/*
+	 * The child *may* choose to prctrl(PR_SET_PDEATHSIG, SIGTERM)
+	 * (Linux-only) to be terminated when the parent goes away. This would
+	 * make "kill <ppid>" do what the sysadmin probably expects it to do,
+	 * but a sysadmin does need to know to target the child for e.g.
+	 * "kill -USR1 <pid>" - and there's no fully reliable way to forward
+	 * such signals.
+	 */
 
 	/*
 	 * Note: pid is guaranteed to remain valid (i.e. the child will hang
