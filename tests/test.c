@@ -42,7 +42,7 @@ main(int argc, char **argv)
 
 	if (argc == 1) {
 		msg_buf_size = 0;
-	} else if (argc == 2 || argc == 4) {
+	} else if (argc == 2) {
 		errno = 0;
 		char *endptr;
 		const uintmax_t msg_buf_size_um = strtoumax(argv[1], &endptr, 0);
