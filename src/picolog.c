@@ -155,6 +155,15 @@ picolog(const char *format, ...)
 		if (available_size >= 1) {
 			va_list ap;
 			va_start(ap, format);
+			/*
+			 * FIXME (maybe?) If vsnprintf() crashes, msgs[] may be
+			 * left without a '\0' separating new and old messages.
+			 * But specifying an incorrect format string to
+			 * picolog() seems quite unlikely, and writing to
+			 * msgs[] directly saves us from memcpy()ing from some
+			 * temporary buffer (and having to *find* a temporary
+			 * buffer!)
+			 */
 			needed = vsnprintf(&msgs[msgs_idx], available_size - 1,
 			    format, ap);
 			va_end(ap);
