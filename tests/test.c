@@ -28,7 +28,7 @@
 
 #include "include/picolog.h"
 
-[[noreturn]]
+__attribute__((noreturn))
 static void
 usage(void)
 {

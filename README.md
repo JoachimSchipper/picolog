@@ -58,3 +58,11 @@ As an alternative to deferred logging, you may want to consider dynamic tracing
 systems like [dtrace](https://dtrace.org/) or Linux'
 [bpftrace](https://bpftrace.org/) and [bcc](https://iovisor.github.io/bcc/).
 Developers may prefer keeping their log statements in the source code, though.
+
+## Requirements
+
+picolog is written to compile with gcc -std=c99 or clang -std=c99. picolog
+needs libc and a Unix-like system.
+
+`make test` requires Python (any version supported by the Python developers).
+`make monitor` additionally requires `entr`.
