@@ -21,6 +21,7 @@
 #include <assert.h>
 #include <ctype.h>
 #include <err.h>
+#include <errno.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -96,9 +97,17 @@ picolog_start_monitor(size_t msg_buf_size)
 
 	/* FIXME should probably set up signal handlers for parent */
 
+	/*
+	 * Note: pid is guaranteed to remain valid (i.e. the child will hang
+	 * around as a zombie process) until waitpid() succeeds, unless the
+	 * caller did something deeply non-standard like
+	 * sigaction(SIGCHILD, ... SA_NOCLDWAIT ...). Don't do that.
+	 */
 	int status;
-	if (waitpid(pid, &status, 0) == -1)
-		err(1, "failed to wait for child %jd\n", (intmax_t)pid);
+	while (waitpid(pid, &status, 0) == -1) {
+		if (errno != EINTR)
+			err(1, "failed to wait for child %jd\n", (intmax_t)pid);
+	}
 
 	printf("%s%s", &msgs[strlen(msgs) + 1], msgs);
 
