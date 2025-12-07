@@ -38,8 +38,12 @@ rest of the program, `picolog()`-ing as appropriate. `picolog()` itself is
 basically `snprintf()`, so reasonably fast, unlikely to block, and in-memory.
 
 ## Alternatives
-picolog implements
-[deferred logging](https://yosefk.com/blog/delayed-printf-for-real-time-logging.html).
+
+picolog is inspired by
+[deferred logging](https://yosefk.com/blog/delayed-printf-for-real-time-logging.html),
+although picolog actually does format logs immediately - only the printing is
+deferred (and only the final logs are printed.)
+
 picolog aims at a POSIX environment, requires no integration with the build
 system, and is simple enough to be hackable.
 
