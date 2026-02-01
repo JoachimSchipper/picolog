@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Joachim Schipper <joachim@joachimschipper.nl>
+# Copyright (c) 2025, 2026 Joachim Schipper <joachim@joachimschipper.nl>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -18,7 +18,7 @@ SRC=src/picolog.c
 HEADERS=include/picolog.h
 TESTS=tests/test.c
 
-CC=gcc
+# We leave CC at default; gcc or clang both work
 CFLAGS=-std=c99 -W -Wall -Wno-sign-compare -Wno-unused-parameter -Wbad-function-cast -Wcast-align -Wcast-qual -Wchar-subscripts -Wfloat-equal -Wmissing-declarations -Wmissing-format-attribute -Wmissing-noreturn -Wmissing-prototypes -Wnested-externs -Wpointer-arith -Wshadow -Wstrict-prototypes -Wwrite-strings -Wundef -Werror -g -O2 -I.
 
 OBJS=${SRC:.c=.o}
